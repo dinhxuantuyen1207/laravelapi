@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\v1\BaiVietController;
 use App\Http\Controllers\Api\v1\HomeController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,3 +18,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/',[HomeController::class,'index']);
 Route::get('/bai-viet/{id}',[BaiVietController::class,'show']);
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\LoginController::class, 'index'])->name('home');
+
