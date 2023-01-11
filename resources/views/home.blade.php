@@ -14,7 +14,10 @@
                         </div>
                     @endif
 
-                    {{ __('You are logged in!') }}
+                    <a href="{{route('category.create')}}" class="btn btn-primary m-2">Thêm Danh Mục Bài Viêt</a>
+                    <a href="{{route('category.index')}}" class="btn btn-primary m-2">Liệt Kê Danh Mục Bài Viêt</a>
+                    <a href="{{route('post.create')}}" class="btn btn-primary m-2">Thêm Bài Viết</a>
+                    <a href="{{route('post.index')}}" class="btn btn-primary m-2">Liệt Kê Bài Viết</a>
                 </div>
             </div>
         </div>

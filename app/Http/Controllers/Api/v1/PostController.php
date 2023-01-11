@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
+use App\Models\CategoryPost;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+
 
 class PostController extends Controller
 {
@@ -15,7 +18,9 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        $post = Post::with('category')->orderBy('id','DESC')->paginate(5);
+
+        return view('layouts.post.index')->with(compact('post'));
     }
 
     /**
@@ -25,7 +30,8 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        $category = CategoryPost::all();
+        return view('layouts.post.create')->with(compact('category'));
     }
 
     /**
@@ -36,7 +42,24 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $post = new Post();
+        $post->post_date = Carbon::now('Asia/Ho_Chi_Minh')->format('d-m-Y');;
+        $post->views = $request->views;
+        $post->title = $request->title;
+        $post->short_desc = $request->short_desc;
+        $post->desc = $request->desc;
+        $post->post_category_id = $request->post_category_id;
+        if($request['image']){
+            $image = $request['image'];
+            $ext = $image->getClientOriginalExtension();
+            $name = time().'_'.$image->getClientOriginalName();
+            $image->move('uploads', $name);
+            $post->image = $name;
+        }else {
+            $post->image = 'default.jpg';
+        }
+        $post->save();
+        return redirect()->route('post.index')->with('success','Post Create Successfully');
     }
 
     /**
@@ -45,9 +68,11 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function show(Post $post)
+    public function show($id)
     {
-        //
+        $post  = Post::find($id);
+        $category = CategoryPost::all();
+        return view('layouts.post.show')->with(compact('category', 'post'));
     }
 
     /**
@@ -68,9 +93,26 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post)
+    public function update(Request $request,$post)
     {
-        //
+        $post = Post::find($post);
+        $post->views = $request->views;
+        $post->title = $request->title;
+        $post->short_desc = $request->short_desc;
+        $post->desc = $request->desc;
+        $post->post_category_id = $request->post_category_id;
+        if($request['image']){
+            if($post->image != 'default.jpg'){
+                unlink('uploads/'.$post->image);
+            }
+            $image = $request['image'];
+            $ext = $image->getClientOriginalExtension();
+            $name = time().'_'.$image->getClientOriginalName();
+            $image->move('uploads', $name);
+            $post->image = $name;
+        }
+        $post->save();
+        return redirect()->route('post.index')->with('success','Post Update Successfully');
     }
 
     /**
@@ -79,8 +121,15 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Post $post)
+    public function destroy($id)
     {
-        //
+        $path = 'uploads/';
+        $post = Post::find($id);
+        if($post->image != 'default.jpg'){
+            unlink($path.$post->image);
+        }
+        $post->delete();
+
+        return redirect()->back();
     }
 }

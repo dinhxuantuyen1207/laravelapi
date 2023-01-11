@@ -1,6 +1,10 @@
 <?php
 
+use App\Http\Controllers\Api\v1\BaiVietController;
+use App\Http\Controllers\Api\v1\CategoryPostController;
 use App\Http\Controllers\Api\v1\CustomerController;
+use App\Http\Controllers\Api\v1\DanhMucController;
+use App\Http\Controllers\Api\v1\PostController;
 use App\Http\Controllers\Api\v2\CustomerController as V2CustomerController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -25,6 +29,12 @@ Route::get('',function(){
 // Route::resource('v1/customer',CustomerController::class)->except(['edit','create']);//Loại Link edit vs create
 Route::prefix('v1')->group(function(){
     Route::resource('customer',CustomerController::class)->except(['edit','create']);//Loại Link edit vs create
+    Route::resource('category',CategoryPostController::class);
+    Route::resource('post', PostController::class);
+    Route::resource('bai-viet', BaiVietController::class);
+    Route::resource('danh-muc', DanhMucController::class);
+
+
 });
 Route::prefix('v2')->group(function(){
     Route::resource('customer',V2CustomerController::class)->only(['show']);

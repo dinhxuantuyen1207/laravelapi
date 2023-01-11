@@ -23,3 +23,4 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\LoginController::class, 'index'])->name('home');
 
+Route::get('/tim-kiem',[HomeController::class,'search']);

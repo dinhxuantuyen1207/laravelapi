@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
+use App\Models\CategoryPost;
+use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -12,9 +15,23 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function search(){
+        $keywords = $_GET['keywords'];
+        $category_post = Post::with('category')->where('title','like','%'.$keywords.'%')
+        ->orwhere('short_desc','like','%'.$keywords.'%')
+        ->orwhere('desc','like','%'.$keywords.'%')
+        ->get();
+        $category = CategoryPost::all();
+        return view('pages.timkiem')->with(compact('category','category_post','keywords'));
+    }
     public function index()
     {
-        return view('pages.main');
+        $all_post = Post::with('category')->paginate(5);
+        // $newest_post = Post::all()->random(5);
+        $newest_post = Post::orderBy(DB::raw('RAND()'))->limit(5)->get();
+        $viewest_post = Post::orderBy('views','DESC')->limit(5)->get();
+        $category = CategoryPost::all();
+        return view('pages.main')->with(compact('category','all_post','newest_post','viewest_post'));
     }
 
     /**

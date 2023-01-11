@@ -7,8 +7,8 @@
         <meta name="keywords" content="Coffee Break Responsive web template, Bootstrap Web Templates, Flat Web Templates, Andriod Compatible web template,
         Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyErricsson, Motorola web design" />
 
-        <title>Laravel</title>
-
+        <title>Tiền Số Offline</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 
@@ -34,7 +34,7 @@
         <div class="header-top">
             <div class="container">
                 <div class="head-main">
-                    <a href="index.html"><img src="/images/logo-1.png" alt="" /></a>
+                    <a href="{{url('/')}}"><h2 class="logo">Tiền Số Offline.Com</h2></a>
                 </div>
             </div>
         </div>
@@ -47,15 +47,19 @@
                      <span class="menu"></span>
                         <ul class="navig">
                             <li><a href="{{url('/')}}"  class="active">Trang Chủ</a></li>
-                            <li><a href="about.html">Về Chúng Tôi</a></li>
-                            <li><a href="gallery.html">Tin Tức</a></li>
+                            @foreach ($category as $key=>$value )
+                            <li><a href="{{route('danh-muc.show',[$value->id,'slug'=>Str::slug($value->title)])}}">{{$value->title}}</a></li>
+                            @endforeach
                         </ul>
                 </div>
                 <div class="header-right">
-                    <div class="search-bar">
-                        <input type="text" value="" placeholder="Tìm Kiếm">
-                        <input type="submit" value="">
-                    </div>
+                    <form action="{{url('tim-kiem')}}" method="get">
+                        @csrf
+                        <div class="search-bar">
+                            <input type="text" value="" name="keywords" placeholder="Tìm Kiếm">
+                            <input type="submit" value="">
+                        </div>
+                    </form>
                     <ul>
                         <li><a href="#"><span class="fb"> </span></a></li>
                     </ul>
@@ -165,7 +169,7 @@
         <div class="footer">
             <div class="container">
                 <div class="footer-text">
-                    <p>© 2015 Coffee Break. All Rights Reserved | Design by  <a href="http://w3layouts.com/" target="_blank">W3layouts</a> </p>
+                    <p>© 2022    Coffee Break. All Rights Reserved | Design by  <a href="#" target="_blank">Me</a> </p>
                 </div>
             </div>
         </div>

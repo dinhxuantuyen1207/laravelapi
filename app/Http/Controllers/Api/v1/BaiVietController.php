@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
+use App\Models\CategoryPost;
+use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BaiVietController extends Controller
 {
@@ -46,7 +49,11 @@ class BaiVietController extends Controller
      */
     public function show($id)
     {
-        return view('pages.detail');
+        $post = Post::with('category')->where('id',$id)->first();
+        $category_id = $post->post_category_id;
+        $post_related = Post::with('category')->whereNotIn('id',[$id])->where('post_category_id',$category_id)->orderBy(DB::raw('RAND()'))->limit(5)->get();
+        $category = CategoryPost::all();
+        return view('pages.detail')->with(compact('category','post','post_related'));
     }
 
     /**
