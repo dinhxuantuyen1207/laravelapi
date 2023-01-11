@@ -22,6 +22,7 @@ Route::get('/bai-viet/{id}',[BaiVietController::class,'show']);
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\LoginController::class, 'index'])->name('home');
+
 //aaaa
 Route::get('/tim-kiem',[HomeController::class,'search']);
 Route::get('/test',[HomeController::class,'test']);
